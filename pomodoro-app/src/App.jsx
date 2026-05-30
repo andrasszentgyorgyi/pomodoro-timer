@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react'
 import useTimerStore from './store/useTimerStore'
+import PirateCove from './components/PirateCove'
+import OpenWater from './components/OpenWater'
 
 // Standard public-domain audio URLs for immediate testing
 const AUDIO_SOURCES = {
@@ -10,8 +12,8 @@ const AUDIO_SOURCES = {
 }
 
 function App() {
-  const { 
-    timeLeft, isRunning, mode, 
+  const {
+    timeLeft, isRunning, mode,
     ambientTrack, ambientVolume,
     startTimer, pauseTimer, resetTimer, tick, setMode,
     setAmbientTrack, setAmbientVolume
@@ -30,7 +32,7 @@ function App() {
   // 2. Wrap actions with a click sound
   const handleStartPause = () => {
     playSoundEffect('click')
-    if (isRunning) pauseTimer() 
+    if (isRunning) pauseTimer()
     else startTimer()
   }
 
@@ -52,7 +54,7 @@ function App() {
       clearInterval(interval)
       playSoundEffect('alarm') // Play calm completion signal when timer hits 0
     }
-    
+
     return () => clearInterval(interval)
   }, [isRunning, timeLeft, tick])
 
@@ -66,7 +68,7 @@ function App() {
     if (ambientTrack !== 'none') {
       audio.src = AUDIO_SOURCES[ambientTrack]
       audio.loop = true
-      
+
       // Only play background noise if the timer is actively running
       if (isRunning) {
         audio.play().catch(err => console.log("Playback interrupted:", err))
@@ -87,37 +89,40 @@ function App() {
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-zinc-900 text-white p-6">
-      
+
       {/* Hidden HTML5 Audio element for background streaming */}
       <audio ref={ambientAudioRef} />
 
       {/* Mode Selectors */}
-      <div className="flex gap-4 mb-8">
+      <div className="flex gap-4 mb-8 z-10">
         <button
           onClick={() => handleModeChange('work')}
-          className={`px-4 py-2 rounded-full font-semibold transition-colors ${
-            mode === 'work' ? 'bg-indigo-500 text-white' : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'
-          }`}
+          className={`px-4 py-2 rounded-full font-semibold transition-colors ${mode === 'work' ? 'bg-indigo-500 text-white' : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'
+            }`}
         >
           Focus
         </button>
         <button
           onClick={() => handleModeChange('break')}
-          className={`px-4 py-2 rounded-full font-semibold transition-colors ${
-            mode === 'break' ? 'bg-emerald-500 text-white' : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'
-          }`}
+          className={`px-4 py-2 rounded-full font-semibold transition-colors ${mode === 'break' ? 'bg-emerald-500 text-white' : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'
+            }`}
         >
           Break
         </button>
       </div>
 
+      {/* --- NEW: The Dynamic Pirate Scene --- */}
+      <div className="w-full max-w-2xl px-4 z-10">
+        {isRunning ? <OpenWater /> : <PirateCove />}
+      </div>
+
       {/* Timer Display */}
-      <div className="text-9xl font-bold tracking-tighter mb-8 tabular-nums">
+      <div className="text-9xl font-bold tracking-tighter mb-8 tabular-nums z-10">
         {formatTime(timeLeft)}
       </div>
 
       {/* Core Controls */}
-      <div className="flex gap-4 mb-16">
+      <div className="flex gap-4 mb-16 z-10">
         <button
           onClick={handleStartPause}
           className="px-8 py-3 bg-white text-zinc-900 font-bold rounded-full hover:bg-zinc-200 transition-transform active:scale-95"
@@ -133,20 +138,19 @@ function App() {
       </div>
 
       {/* Audio Panel Card */}
-      <div className="w-full max-w-md bg-zinc-800/50 border border-zinc-700/50 rounded-2xl p-6 backdrop-blur-sm">
+      <div className="w-full max-w-md bg-zinc-800/50 border border-zinc-700/50 rounded-2xl p-6 backdrop-blur-sm z-10">
         <h2 className="text-lg font-bold mb-4 tracking-tight text-zinc-200">Background Atmosphere</h2>
-        
+
         {/* Track Selection Buttons */}
         <div className="grid grid-cols-3 gap-3 mb-6">
           {['none', 'rain', 'cafe'].map((track) => (
             <button
               key={track}
-              onClick={() => setAmbientTrack(track) }
-              className={`py-2 px-3 rounded-xl capitalize font-medium text-sm transition-colors ${
-                ambientTrack === track 
-                  ? 'bg-zinc-100 text-zinc-900 font-semibold' 
+              onClick={() => setAmbientTrack(track)}
+              className={`py-2 px-3 rounded-xl capitalize font-medium text-sm transition-colors ${ambientTrack === track
+                  ? 'bg-zinc-100 text-zinc-900 font-semibold'
                   : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700 border border-zinc-700'
-              }`}
+                }`}
             >
               {track === 'none' ? 'Silent' : track}
             </button>
@@ -173,9 +177,8 @@ function App() {
           Note: Atmosphere plays automatically when the timer is running.
         </p>
       </div>
-      
+
     </div>
   )
 }
-
 export default App
