@@ -1,7 +1,5 @@
 import { useEffect, useRef } from 'react'
 import useTimerStore from './store/useTimerStore'
-import PirateCove from './components/PirateCove'
-import OpenWater from './components/OpenWater'
 
 // Standard public-domain audio URLs for immediate testing
 const AUDIO_SOURCES = {
