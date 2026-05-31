@@ -94,7 +94,7 @@ function App() {
       <audio ref={ambientAudioRef} />
 
       {/* Mode Selectors */}
-      <div className="flex gap-4 mb-8 z-10">
+      <div className="flex gap-4 mb-8">
         <button
           onClick={() => handleModeChange('work')}
           className={`px-4 py-2 rounded-full font-semibold transition-colors ${mode === 'work' ? 'bg-indigo-500 text-white' : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'
@@ -111,18 +111,13 @@ function App() {
         </button>
       </div>
 
-      {/* --- NEW: The Dynamic Pirate Scene --- */}
-      <div className="w-full max-w-2xl px-4 z-10">
-        {isRunning ? <OpenWater /> : <PirateCove />}
-      </div>
-
       {/* Timer Display */}
-      <div className="text-9xl font-bold tracking-tighter mb-8 tabular-nums z-10">
+      <div className="text-9xl font-bold tracking-tighter mb-8 tabular-nums">
         {formatTime(timeLeft)}
       </div>
 
       {/* Core Controls */}
-      <div className="flex gap-4 mb-16 z-10">
+      <div className="flex gap-4 mb-16">
         <button
           onClick={handleStartPause}
           className="px-8 py-3 bg-white text-zinc-900 font-bold rounded-full hover:bg-zinc-200 transition-transform active:scale-95"
@@ -138,7 +133,7 @@ function App() {
       </div>
 
       {/* Audio Panel Card */}
-      <div className="w-full max-w-md bg-zinc-800/50 border border-zinc-700/50 rounded-2xl p-6 backdrop-blur-sm z-10">
+      <div className="w-full max-w-md bg-zinc-800/50 border border-zinc-700/50 rounded-2xl p-6 backdrop-blur-sm">
         <h2 className="text-lg font-bold mb-4 tracking-tight text-zinc-200">Background Atmosphere</h2>
 
         {/* Track Selection Buttons */}
@@ -148,8 +143,8 @@ function App() {
               key={track}
               onClick={() => setAmbientTrack(track)}
               className={`py-2 px-3 rounded-xl capitalize font-medium text-sm transition-colors ${ambientTrack === track
-                  ? 'bg-zinc-100 text-zinc-900 font-semibold'
-                  : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700 border border-zinc-700'
+                ? 'bg-zinc-100 text-zinc-900 font-semibold'
+                : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700 border border-zinc-700'
                 }`}
             >
               {track === 'none' ? 'Silent' : track}
@@ -180,5 +175,6 @@ function App() {
 
     </div>
   )
-}
+} // Ensure this matches your closing block!
+
 export default App
